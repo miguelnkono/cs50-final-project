@@ -4,10 +4,73 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/style.css">
     <title>Vite App</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <h1>Student marks calculation.</h1>
+    
+    <section>
+      <div class="mark-registration">
+        <!-- header section of the page -->
+        <header>
+          <nav>
+            <!-- logo -->
+            <span class="logo">MGSolution</span>
+            <!-- connection & registration -->
+            <a href="#">connection/registration</a>
+          </nav>
+        </header>
+
+        <!-- form section of the page -->
+        <form action="" method="post">
+          <!-- the name of the subject -->
+          <label for="subject-name">
+            Subject name:
+          </label>
+          <input type="text" id="subject-name" name="subject-name" required />
+          <!-- the subject option -->
+          <label for="subject-option">
+            subjec type:
+          </label>
+          <select name="subject-option" id="subject-option">
+              <option value="cc" selected>cc</option>
+              <option value="sn">sn</option>
+          </select>
+          <!-- subject mark -->
+          <label for="subject-mark">
+            Subject mark: 
+          </label>
+          <input type="number" id="subject-mark" name="subject-mark" max="20" min="0" required />
+
+          <button type="submit" id="submit">add</button>
+        </form>
+
+        <!-- subject info (name, mark, cc mark, sn mark) table -->
+        <table>
+          <!-- the header of the table -->
+          <thead>
+            <tr>
+              <td>subject name</td>
+              <td>cc mark</td>
+              <td>sn mark</td>
+              <td>total mark</td>
+            </tr>
+          </thead>
+          <!-- the body of the table -->
+          <tbody>
+            <tr>
+              <td>math</td>
+              <td>12.9</td>
+              <td>16</td>
+              <td>13</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- js script -->
+    <script type="module" src="src/main.js"></script>
   </body>
 </html>

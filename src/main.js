@@ -1,24 +1,16 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+const subject_name = document.getElementById("subject-name");
+const subject_mark = document.getElementById("subject-mark");
+const subject_type = document.getElementById("subject-option");
+const submit_btn = document.getElementById("submit");
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+submit_btn.addEventListener("click", (e) => {
+  e.preventDefault();
 
-setupCounter(document.querySelector('#counter'))
+  console.log(subject_name.value);
+  console.log(subject_type.value);
+  console.log(subject_mark.value);
+
+  subject_name.value = "";
+  subject_mark.value = "";
+  subject_type.value = "";
+});
