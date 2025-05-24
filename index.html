@@ -29,19 +29,15 @@
             Subject name:
           </label>
           <input type="text" id="subject-name" name="subject-name" required />
-          <!-- the subject option -->
-          <label for="subject-option">
-            subjec type:
-          </label>
-          <select name="subject-option" id="subject-option">
-              <option value="cc" selected>cc</option>
-              <option value="sn">sn</option>
-          </select>
           <!-- subject mark -->
-          <label for="subject-mark">
-            Subject mark: 
+          <label for="subject-mark-cc">
+            Subject mark(cc): 
           </label>
-          <input type="number" id="subject-mark" name="subject-mark" max="20" min="0" required />
+          <input type="number" id="subject-mark-cc" name="subject-mark-cc" max="20" min="0" />
+          <label for="subject-mark-sn">
+            Subject mark(sn): 
+          </label>
+          <input type="number" id="subject-mark-sn" name="subject-mark-sn" max="20" min="0" />
 
           <button type="submit" id="submit">add</button>
         </form>
@@ -60,43 +56,18 @@
           </thead>
           <!-- the body of the table -->
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>math</td>
-              <td>12.9</td>
-              <td>16</td>
-              <td>13</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>crypto</td>
-              <td>18.5</td>
-              <td>20</td>
-              <td>17.75</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>crypto</td>
-              <td>18.5</td>
-              <td>20</td>
-              <td>17.75</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>crypto</td>
-              <td>18.5</td>
-              <td>20</td>
-              <td>17.75</td>
-            </tr>
           </tbody>
         </table>
 
         <!-- allow the user to modify the marks. -->
-        <button type="button" id="modify">modify</button>
-        <!-- when the student clicks on the submit button, a new form appears asking the user to 
-         enter the index of the row to modify and also the new information then clicks on the change
-         button to submit the changes so that the table updates itself. 
-        -->
+         <div class="manipulation">
+          <button type="button" id="modify">modify</button>
+          <!-- when the student clicks on the modify button, a new form appears asking the user to 
+          enter the index of the row to modify and also the new information then clicks on the change
+          button to submit the changes so that the table updates itself. 
+          -->
+          <button type="button" id="delete">delete</button>
+         </div>
       </div>
     </section>
 
