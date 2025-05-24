@@ -81,7 +81,52 @@ input, select {
   display: block;
   text-align: center;
   margin: 10px auto;
-  width: 300px;
+  width: 80%;
+}
+
+/* styling the table. */
+.subject-mark-table
+{
+  border-collapse: collapse;
+  /* min-width: calc(widht / 5); */
+  min-width: 80%;
+  max-width: 80%;
+  font-size: 0.9em;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+
+  margin: 20px auto;
+}
+
+.subject-mark-table th ,
+.subject-mark-table td 
+{
+  padding: 5px;
+}
+
+.subject-mark-table thead tr 
+{
+  background-color: #232323;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+.subject-mark-table tbody tr:nth-of-type(even)
+{
+  background-color: #e6e6e6;
+}
+
+.subject-mark-table tbody tr:last-of-type
+{
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.subject-mark-table tbody tr 
+{
+  border-bottom: 1px solid #212121;
 }
 
 @media (prefers-color-scheme: light) {

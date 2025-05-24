@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Folder for the notes
+notes_on_tables_in_html_css
