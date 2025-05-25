@@ -1,11 +1,70 @@
-import { add, get, getLast, Subject } from "./subject";
+import { add, get, Subject, subjects, update } from "./subject";
 
 const subject_name = document.getElementById("subject-name");
 const subject_mark_cc = document.getElementById("subject-mark-cc");
 const subject_mark_sn = document.getElementById("subject-mark-sn");
 const submit_btn = document.getElementById("submit");
+const modify_btn = document.getElementById("modify");
+const delete_btn = document.getElementById("delete");
 
-let count = 1;
+delete_btn.addEventListener("click", () => {
+  const index = prompt("Enter the row number to delete:");
+  if (index === null) return; // User cancelled
+
+  const idxToDelete = Number(index);
+  if (isNaN(idxToDelete)) {
+    alert("Please enter a valid number.");
+    return;
+  }
+
+  remove(idxToDelete);
+
+  const tbody = document.querySelector("tbody");
+  tbody.innerHTML = get().join('');
+
+  // save();
+});
+
+modify_btn.addEventListener("click", () => {
+  const index = prompt("Enter the row number to modify:");
+  if (index === null) return;
+
+  const idxToModify = Number(index);
+  if (isNaN(idxToModify)) {
+    alert("Invalid number.");
+    return;
+  }
+
+  const subject = subjects.find(sub => sub.idx === idxToModify);
+  if (!subject) {
+    alert("Subject not found.");
+    return;
+  }
+
+  const newName = prompt("Enter new name:", subject.name);
+  if (newName === null) return;
+
+  const newCC = prompt("Enter new CC mark (0-20):", subject.mark_cc);
+  if (newCC === null) return;
+  const ccNum = Number(newCC);
+  if (isNaN(ccNum) || ccNum < 0 || ccNum > 20) {
+    alert("CC mark must be between 0 and 20.");
+    return;
+  }
+
+  const newSN = prompt("Enter new SN mark (0-20):", subject.mark_sn);
+  if (newSN === null) return;
+  const snNum = Number(newSN);
+  if (isNaN(snNum) || snNum < 0 || snNum > 20) {
+    alert("SN mark must be between 0 and 20.");
+    return;
+  }
+
+  update(idxToModify, newName, ccNum, snNum);
+
+  const tbody = document.querySelector("tbody");
+  tbody.innerHTML = get().join('');
+});
 
 submit_btn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -27,15 +86,12 @@ submit_btn.addEventListener("click", (e) => {
   const subject = new Subject(name, cc, sn);
 
   if (add(subject)) {
-    document.getElementsByTagName("tbody")[0].innerHTML += `
-      <tr>
-          <td>${subject.idx}</td>
-          <td>${subject.name}</td>
-          <td>${subject.mark_cc}</td>
-          <td>${subject.mark_sn}</td>
-          <td>${subject.total}</td>
-      </tr>
-    `;   
+    const tbody = document.querySelector("tbody");
+    tbody.innerHTML = get().join("");
+    
+    subject_name.value = '';
+    subject_mark_cc.value = '';
+    subject_mark_sn.value = '';
   }
 
 });

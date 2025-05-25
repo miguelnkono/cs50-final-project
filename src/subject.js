@@ -1,8 +1,9 @@
-// array of subjects
+// array of subjects, this is met to hold all the subjects 
+// records.
 let subjects = [];
 
 // index variable
-let idx = 0;
+let idx = 1;
 
 function add (subject)
 {
@@ -38,14 +39,12 @@ function remove (index)
     }
 }
 
-function update (idx, name, cc, sn)
-{
+function update (idx, name, cc, sn){
     subjects.forEach(subject => {
-        if (subject.idx === idx) 
-        {
-            subject.name(name);
-            subject.mark_cc(cc);
-            subject.mark_sn(sn);
+        if (subject.idx === idx) {
+            subject.name = name;
+            subject.mark_cc = cc;
+            subject.mark_sn = sn;
         }
     });
 }
@@ -63,21 +62,48 @@ function get ()
             </tr>
         `;
     });
-    
 }
 
-function getLast ()
-{
-    return `
-        <tr>
-            <td>${subjects[idx].idx}</td>
-            <td>${subjects[idx].name}</td>
-            <td>${subjects[idx].mark_cc}</td>
-            <td>${subjects[idx].mark_sn}</td>
-            <td>${subjects[idx].total}</td>
-        </tr>
-    `;
-}
+
+
+// save the subject record into a file
+// async function saveAll() {
+//     const subs = subjects.map((sub) => {
+//         return `
+//             {
+//                 idx: ${sub.idx},
+//                 name: ${sub.name},
+//                 mark_cc: ${sub.mark_cc},
+//                 mark_sn: ${sub.mark_sn},
+//                 total: ${sub.total}
+//             }
+//         `;
+//     });
+//     try {
+//         await writeFile("./subjects_records.json", subs);
+//     } catch (err) {
+//         throw new Error("error while writing to a file");
+//     }
+// }
+
+// async function save() {
+//     const subs = subjects.map((sub) => {
+//         return `
+//             {
+//                 idx: ${sub.idx},
+//                 name: ${sub.name},
+//                 mark_cc: ${sub.mark_cc},
+//                 mark_sn: ${sub.mark_sn},
+//                 total: ${sub.total}
+//             }
+//         `;
+//     });
+//     try {
+//         await writeFile("./subjects_records.json", subs, { flag: "a+" });
+//     } catch (err) {
+//         throw new Error("error while writing to a file");
+//     }
+// }
 
 // the subject class
 class Subject {
@@ -120,4 +146,4 @@ class Subject {
   }
 }
 
-export { Subject, get, update, add, remove, getLast, };
+export { Subject, get, update, add, remove, subjects, };

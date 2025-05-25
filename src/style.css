@@ -77,7 +77,7 @@ form {
   padding: 5px;
 }
 
-input, select {
+input {
   display: block;
   text-align: center;
   margin: 10px auto;
@@ -106,9 +106,20 @@ input, select {
   padding: 5px;
 }
 
+/* style when the contentEditable is set to true */
+.subject-mark-table td[contenteditable="true"]:focus
+{
+  background-color: #fff;
+  outline: 2px solid #2196F3;
+}
+.subject-mark-table td[contenteditable="true"]:hover 
+{
+  background-color: #f9f9f9;
+}
+
 .subject-mark-table thead tr 
 {
-  background-color: #232323;
+  background-color: #213547;
   color: white;
   text-align: left;
   font-weight: bold;
