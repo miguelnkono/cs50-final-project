@@ -104,6 +104,7 @@ input {
 .subject-mark-table td 
 {
   padding: 5px;
+  text-wrap: balance;
 }
 
 /* style when the contentEditable is set to true */
