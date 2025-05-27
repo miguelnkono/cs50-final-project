@@ -1,0 +1,9 @@
+Additional Improvements
+
+    Inline Editing: Replace modify prompts with double-click to edit table cells.
+
+    Responsive Design: Use media queries for better mobile support.
+
+    Input Range Sliders: Add sliders for marks alongside number inputs.
+
+    Data Export: Add buttons to export data as CSV/JSON.

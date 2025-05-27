@@ -1,27 +1,57 @@
 // array of subjects, this is met to hold all the subjects 
+
+import { saveSubjects } from "./storage";
+
 // records.
 let subjects = [];
 
 // index variable
 let idx = 1;
 
+export function getNextIndex() {
+    return idx++;
+}
+  
+export function setIndex(newIndex) {
+    idx = newIndex;
+}
+
+// feedback function
+export function showFeedback(message, isError = false) {
+    const feedback = document.getElementById('feedback');
+    feedback.textContent = message;
+    feedback.className = isError ? 'error' : 'success';
+    feedback.classList.remove('hidden');
+    setTimeout(() => feedback.classList.add('hidden'), 3000);
+  }
+
 function add (subject)
 {
     if (subject instanceof Subject) 
     {
+        // check if the subject name already exists inside the subjects global variable.
+        const exists = subjects.some(sub => sub.name.toLowerCase() === subject.name.toLowerCase());
+        if (exists) {
+            showFeedback('Subject already exists!', true);
+            return false;
+        }
+
         if (subject.name === "") {
-            alert("You need to provide the name of the subject you want to add!");
+            showFeedback("You need to provide the name of the subject you want to add!", true)
             return false;
         }
         if (subject.mark_cc > 20 || subject.mark_cc < 0) {
-            alert("The mark for the cc can not be less or greater than zero!");
+            showFeedback("The mark for the cc can not be less or greater than zero!", true);
             return false;
         }
         if (subject.mark_sn > 20 || subject.mark_sn < 0) {
-            alert("The mark for the cc can not be less or greater than zero!");
+            showFeedback("The mark for the cc can not be less or greater than zero!", true);
             return false;
         }
         subjects.push(subject);
+        showFeedback("subject add successfully");
+        // save the subject to localStorage.
+        saveSubjects();
     }
     else 
     {
@@ -30,23 +60,62 @@ function add (subject)
     return true;
 }
 
-function remove (index)
+export function remove (index)
 {
     const idx = subjects.findIndex(subject => subject.idx === index);
     if (idx !== -1)
     {
-        subjects = subjects.filter(subject => subject.idx !== index);
+        subjects.splice(index - 1, 1);
+        // save to localStorage
+        saveSubjects();
+    }
+    else 
+    {
+        showFeedback("subject not found!");
+        return;
     }
 }
 
-function update (idx, name, cc, sn){
-    subjects.forEach(subject => {
-        if (subject.idx === idx) {
-            subject.name = name;
-            subject.mark_cc = cc;
-            subject.mark_sn = sn;
-        }
-    });
+export function update(targetIdx, newName, newCC, newSN) {
+    const subject = subjects.find(sub => sub.idx === targetIdx);
+    if (!subject) return false;
+  
+    try {
+      // Validate using temporary subject
+      const temp = new Subject(newName, newCC, newSN);
+      
+      // Check for duplicate names
+      const nameExists = subjects.some(sub => 
+        sub.idx !== targetIdx && 
+        sub.name.toLowerCase() === temp.name.toLowerCase()
+      );
+      
+      if (nameExists) {
+        showFeedback('Subject name already exists', true);
+        return false;
+      }
+  
+      // Update values
+      subject.name = temp.name;
+      subject.mark_cc = temp.mark_cc;
+      subject.mark_sn = temp.mark_sn;
+      subject.computeTotal();
+      
+      saveSubjects();
+      return true;
+    } catch (e) {
+      showFeedback(e.message, true);
+      return false;
+    }
+  }
+
+function escapeHTML (str)
+{
+    return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
 }
 
 function get () 
@@ -55,95 +124,44 @@ function get ()
         return `
             <tr>
               <td>${sub.idx}</td>
-              <td>${sub.name}</td>
+              <td>${escapeHTML(sub.name)}</td>
               <td>${sub.mark_cc}</td>
               <td>${sub.mark_sn}</td>
-              <td>${sub.total}</td>
+              <td>${sub.total.toFixed(2)}</td>
             </tr>
         `;
     });
 }
 
-
-
-// save the subject record into a file
-// async function saveAll() {
-//     const subs = subjects.map((sub) => {
-//         return `
-//             {
-//                 idx: ${sub.idx},
-//                 name: ${sub.name},
-//                 mark_cc: ${sub.mark_cc},
-//                 mark_sn: ${sub.mark_sn},
-//                 total: ${sub.total}
-//             }
-//         `;
-//     });
-//     try {
-//         await writeFile("./subjects_records.json", subs);
-//     } catch (err) {
-//         throw new Error("error while writing to a file");
-//     }
-// }
-
-// async function save() {
-//     const subs = subjects.map((sub) => {
-//         return `
-//             {
-//                 idx: ${sub.idx},
-//                 name: ${sub.name},
-//                 mark_cc: ${sub.mark_cc},
-//                 mark_sn: ${sub.mark_sn},
-//                 total: ${sub.total}
-//             }
-//         `;
-//     });
-//     try {
-//         await writeFile("./subjects_records.json", subs, { flag: "a+" });
-//     } catch (err) {
-//         throw new Error("error while writing to a file");
-//     }
-// }
-
 // the subject class
 class Subject {
-  static count = 0;
+    constructor(name, mark_cc, mark_sn, id) {
+        // Validation
+        if (typeof name !== 'string' || name.trim() === '') {
+            throw new Error('Subject name is required');
+        }
+        if (isNaN(mark_cc) || mark_cc < 0 || mark_cc > 20) {
+            throw new Error('CC mark must be 0-20');
+        }
+        if (isNaN(mark_sn) || mark_sn < 0 || mark_sn > 20) {
+            throw new Error('SN mark must be 0-20');
+        }   
 
-  #name;
-  #mark_cc;
-  #mark_sn;
-  #idx;
-  #total;
+        if (id !== undefined) {
+            this.idx = id; // For loading existing subjects
+        } else {
+            this.idx = idx++; // For new subjects
+        }
 
-  constructor(name, mark_cc, mark_sn) {
-    this.#name = name;
-    this.#mark_cc = mark_cc;
-    this.#mark_sn = mark_sn;
-    this.#idx = idx++;
-    this.computeTotal();
-  }
+        this.name = name.trim();
+        this.mark_cc = Number(mark_cc);
+        this.mark_sn = Number(mark_sn);
+        this.computeTotal();
+    }
 
-  computeTotal ()
-  {
-    this.#total = (this.#mark_cc * 0.4) + (this.#mark_sn * 0.6);
-    return this.#total;
-  }
-
-  get name () { return this.#name; }
-  get mark_cc () { return this.#mark_cc; }
-  get mark_sn () { return this.#mark_sn; }
-  get idx () { return this.#idx; }
-  get total () { return this.#total; }
-
-  set name (new_name) { this.#name = new_name; }
-  set mark_cc (new_cc_mark) { 
-    this.#mark_cc = new_cc_mark;
-    this.computeTotal();
-  }
-  set mark_sn (new_sn_mark) { 
-    this.#mark_sn = new_sn_mark;
-    this.computeTotal();
-  }
+    computeTotal() {
+        this.total = (this.mark_cc * 0.4) + (this.mark_sn * 0.6);
+    }
 }
 
-export { Subject, get, update, add, remove, subjects, };
+export { Subject, get, add,  subjects, };
